@@ -1,0 +1,262 @@
+---
+
+layout: default
+author: lunarwaterfox
+title: yaml 格式
+categories: yaml
+
+---
+
+# 关于 yaml
+> [YAML Ain't Markup Language](https://yaml.org/)
+
+
+# Collections
+
+Sequence
+
+```yaml
+- Mark McGwire
+- Sammy Sosa
+- Ken Griffey
+```
+
+Mapping scaler to scaler
+
+```yaml
+hr:  65    # Home runs
+avg: 0.278 # Batting average
+rbi: 147   # Runs Batted In
+```
+
+Mapping scaler to Sequence
+```yaml
+american:
+  - Boston Red Sox
+  - Detroit Tigers
+  - New York Yankees
+national:
+  - New York Mets
+  - Chicago Cubs
+  - Atlanta Braves
+```
+
+Sequence of Mapping
+```yaml
+-
+  name: Mark McGwire
+  hr:   65
+  avg:  0.278
+-
+  name: Sammy Sosa
+  hr:   63
+  avg:  0.288
+```
+
+也可以写成
+
+```yaml
+- name: Mark McGwire
+  hr:   65
+  avg:  0.278
+- name: Sammy Sosa
+  hr:   63
+  avg:  0.288
+```
+Sequence of Sequence
+
+```yaml
+- [name        , hr, avg  ]
+- [Mark McGwire, 65, 0.278]
+- [Sammy Sosa  , 63, 0.288]
+```
+等同于
+```yaml
+- 
+  - name
+  - hr
+  - avg
+- 
+  - Mark McGwire
+  - 65
+  - 0.278
+- 
+  - Sammy Sosa
+  - 63
+  - 0.288
+```
+
+Mapping scaler to Mapping
+```yaml
+Mark McGwire: {hr: 65, avg: 0.278}
+Sammy Sosa: {
+  hr: 63,
+  avg: 0.288
+}
+```
+
+等同于
+
+```yaml
+Mark McGwire: 
+  hr: 65, 
+  avg: 0.278
+Sammy Sosa:
+  hr: 63,
+  avg: 0.288
+```
+# Structures
+一个 yaml 文件，可以存在多个 document，不同 document 以 --- 开始，... 结束。
+
+```yaml
+---
+time: 20:03:20
+player: Sammy Sosa
+action: strike (miss)
+...
+---
+time: 20:03:47
+player: Sammy Sosa
+action: grand slam
+...
+```
+
+也可以直接使用 --- 开始下一个
+
+```yaml
+# Ranking of 1998 home runs
+---
+- Mark McGwire
+- Sammy Sosa
+- Ken Griffey
+
+# Team ranking
+---
+- Chicago Cubs
+- St Louis Cardinals
+```
+
+---
+
+
+可以用 & 建立 node 锚点，* 来使用锚点
+
+```yaml
+---
+hr:
+- Mark McGwire
+# Following node labeled SS
+- &SS Sammy Sosa
+rbi:
+- *SS # Subsequent occurrence
+- Ken Griffey
+```
+
+等同于
+
+```yaml
+---
+hr:
+- Mark McGwire
+# Following node labeled SS
+- Sammy Sosa
+rbi:
+- Sammy Sosa # Subsequent occurrence
+- Ken Griffey
+```
+---
+以下是生成复合 key: value 的方式，即
+
+key: [ New York Yankees, Atlanta Braves ]
+
+value: [ 2001-07-02, 2001-08-12, 2001-08-14 ]
+
+```yaml
+? - Detroit Tigers
+  - Chicago cubs
+:
+  - 2001-07-23
+
+? [ New York Yankees,
+    Atlanta Braves ]
+: [ 2001-07-02, 2001-08-12,
+    2001-08-14 ]
+```
+# scalars
+
+默认会把 回车符，转换成 空格 
+
+\> 则会在转换完的文本末尾追加一个 回车符
+
+\| 会在保留所有 回车符，不作转换
+
+```yaml
+# plain: This unquoted scalar spans many lines.
+plain: 
+  This unquoted scalar
+  spans many lines.
+  
+# accomplishment: Mark set a major league home run record in 1998.\n
+accomplishment: >
+  Mark set a major league
+  home run record in 1998.
+  
+# stats: 65 Home Runs\n0.278 Batting Average\n
+stats: |
+  65 Home Runs
+  0.278 Batting Average
+```
+
+对于默认文本，还支持 ''，""，的修饰方式，双引号会自动转译，单引号则不作任何转译
+
+```yaml
+unicode: "Sosa did fine.\u263A"
+control: "\b1998\t1999\t2000\n"
+hex esc: "\x0d\x0a is \r\n"
+
+single: '"Howdy!" he cried.'
+quoted: ' # Not a ''comment''.'
+tie-fighter: '|\-*-/|'
+```
+以上规则仅对于默认文本，如果加了 \> 或 |，则都视为不转义字符（类似 ''）
+
+# tags
+
+显式类型转换
+
+```yaml
+--- !!set
+? Mark McGwire
+? Sammy Sosa
+? Ken Griff
+
+--- !!omap
+- Mark McGwire: 65
+- Sammy Sosa: 63
+- Ken Griffy: 58
+
+---
+picture: !!binary |
+  R0lGODlhDAAMAIQAAP//9/X
+  17unp5WZmZgAAAOfn515eXv
+  Pz7Y6OjuDg4J+fn5OTk6enp
+  56enmleECcgggoBADs=
+```
+<!--
+```yaml
+%TAG ! tag:clarkevans.com,2002:
+--- !shape
+  # Use the ! handle for presenting
+  # tag:clarkevans.com,2002:circle
+- !circle
+  center: &ORIGIN {x: 73, y: 129}
+  radius: 7
+- !line
+  start: *ORIGIN
+  finish: { x: 89, y: 102 }
+- !label
+  start: *ORIGIN
+  color: 0xFFEEBB
+  text: Pretty vector drawing.
+```
+-->
