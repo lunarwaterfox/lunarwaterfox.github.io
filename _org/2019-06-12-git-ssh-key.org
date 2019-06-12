@@ -1,5 +1,15 @@
 #+OPTIONS: toc:nil
 
+#+BEGIN_EXPORT markdown
+---
+
+layout: default
+author: lunarwaterfox
+title: CMake Language
+categories: cmake
+
+---
+#+END_EXPORT
 
 * 使用 ~/.ssh/config
 #+BEGIN_QUOTE
