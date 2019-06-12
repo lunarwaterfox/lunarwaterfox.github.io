@@ -3,3 +3,4 @@ description: 做个笔记，以防忘记
 show_downloads: false
 google_analytics:
 theme: jekyll-theme-cayman
+exclude: [_org]
