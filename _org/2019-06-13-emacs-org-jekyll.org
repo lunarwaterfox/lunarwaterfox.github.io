@@ -1,0 +1,75 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
+---
+layout: default
+author: lunarwaterfox
+title: 
+categories: 
+---
+#+END_EXPORT
+
+* 不显示 TableContent
+#+BEGIN_SRC org
+  #+OPTIONS: toc:nil
+#+END_SRC
+
+* headings
+#+BEGIN_SRC markdown
+# heading level 1
+## heading level 2
+#+END_SRC
+#+BEGIN_SRC org
+* heading level 1
+** heading level 2
+#+END_SRC 
+
+快捷键: M-enter
+* unnumbered headings
+- item1
+- item2
+
+* quote block
+#+BEGIN_SRC markdown
+> quote content
+#+END_SRC
+
+#+BEGIN_SRC org
+#+BEGIN_QUOTE
+quote content
+#+END_QUOTE
+#+END_SRC
+快捷键: <q TAB
+* code block
+#+BEGIN_SRC markdown
+```c
+printf("Hello\n");
+
+```
+#+END_SRC
+
+#+BEGIN_SRC org
+#+BEGIN_SRC c
+printf("Hello\n");
+#+END_SRC
+#+END_SRC
+快捷键: <s TAB
+* 特殊字符转义
+查询 M-x org-entities-help
+例如: GIT_SSH <=> GIT\under{}SSH
+* 超链接
+#+BEGIN_SRC markdown
+[链接描述](http://address)
+#+END_SRC
+#+BEGIN_SRC org
+[[http://address][链接描述]]
+#+END_SRC
+
+快捷键: C-c C-l
+* 图片
+#+BEGIN_SRC markdown
+![链接描述](http://address)
+#+END_SRC
+#+BEGIN_SRC org
+[[http://address]]
+#+END_SRC
