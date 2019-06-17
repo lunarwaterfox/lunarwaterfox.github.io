@@ -1,3 +1,6 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
 ---
 
 layout: default
@@ -6,36 +9,36 @@ title: CMake Hello World
 categories: cmake
 
 ---
+#+END_EXPORT
 
+* 关于 CMake 
+#+BEGIN_QUOTE
+[[https://cmake.org/]]
+#+END_QUOTE
 
-# 关于 CMake
-
-> <https://cmake.org/>
-
-
-# Hello World!
+* Hello World!
 
 建立一个最简单的 Hello World 工程
 
-```console
+#+BEGIN_SRC console
 $ tree Hello
 Hello
 ├── Hello
 │   ├── CMakeLists.txt
 │   └── main.cpp
 └── build
-```
+#+END_SRC
 
-```cmake
+#+BEGIN_SRC cmake
 # CMakeLists.txt 是 cmake 工程的配置文件
 
 cmake_minimum_required(VERSION 3.12)
 project(hello)
 
 add_executable(hello main.cpp)
-```
+#+END_SRC
 
-```cpp
+#+BEGIN_SRC cpp
 // main.cpp 一个简单的 Hello World
 
 #include <iostream>
@@ -45,26 +48,24 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-```
+#+END_SRC
 
-&#x2014;
+---
 
 cmake 编译、运行
 
-```console
+#+BEGIN_SRC console
 $ cd build
 $ cmake ../Hello
 $ cmake --build .
 $ ./hello
 Hello World!
-```
+#+END_SRC
 
-
-# 构建器
-
+* 构建器
 可以使用 -G 指定构建器，比如指定 Xcode 构建
 
-```console
+#+BEGIN_SRC console
 $ cmake -G
 CMake Error: No generator specified for -G
 
@@ -75,38 +76,37 @@ Generators
   ...
 
 $ cmake -G Xcode ../Hello
-```
+#+END_SRC
 
 其中：
 
--   只能支持一种构建模式的构建器称为 single-configuration，比如 makefile，ninja
--   可以支持多种构建模式的构建器称为 multi-configuration，比如 Xcode，Visual studio
+- 只能支持一种构建模式的构建器称为 single-configuration，比如 makefile，ninja
+- 可以支持多种构建模式的构建器称为 multi-configuration，比如 Xcode，Visual studio
 
+* 构建模式
+cmake  支持多种构建模式，其默认列表为
 
-# 构建模式
-
-cmake 支持多种构建模式，其默认列表为
-
--   Debug
--   Release
--   MinSizeRel
--   RelWithDebInfo
+- Debug
+- Release
+- MinSizeRel
+- RelWithDebInfo
 
 single-configuration 需要在生成配置时，就指定好构建模式
 
-```console
+#+BEGIN_SRC console
 $ cmake ../Hello -DCMAKE_BUILD_TYPE=Release
 $ cmake --build .
-```
+#+END_SRC
 
 multi-configuration 可以在构建阶段切换
 
-```console
+#+BEGIN_SRC console
 $ cmake ../Hello -GXcode
 $ cmake --build . --config Release
-```
+#+END_SRC
+
+* 相关链接
+- [CMake Language]({% post\under{}url 2019-01-29-cmake-language %})
 
 
-# 相关链接
 
--   [CMake Language]({% post_url 2019-01-29-cmake-language %})

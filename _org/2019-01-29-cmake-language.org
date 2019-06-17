@@ -1,3 +1,6 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
 ---
 
 layout: default
@@ -6,16 +9,15 @@ title: CMake Language
 categories: cmake
 
 ---
+#+END_EXPORT
 
+* 关于 CMake Language
+#+BEGIN_QUOTE
+[[https://cmake.org/cmake/help/latest/manual/cmake-language.7.html][CMake Language]]
+#+END_QUOTE
 
-# 关于 CMake Language
-
-> [CMake Language](https://cmake.org/cmake/help/latest/manual/cmake-language.7.html)
-
-
-# 文件结构
-
-```console
+* 文件结构
+#+BEGIN_SRC console
 $ tree Hello
 Hello
 ├── Hello
@@ -24,112 +26,109 @@ Hello
 │   │   └── utils.cmake
 │   └── main.cpp
 └── build
-```
+#+END_SRC
 
-
-# message
+* message
 
 在 Hello/cmake/utils.cmake 写入
 
-```cmake
+#+BEGIN_SRC cmake
 message("Hello World!")
-```
+#+END_SRC
 
 message 是标准输出语句
 
-```console
+#+BEGIN_SRC console
 $ cmake -P Hello/cmake/utils.cmake
 Hello World!
-```
+#+END_SRC
 
 cmake -P 表示仅执行 cmake 脚本，而不构建项目
 
-&#x2014;
+---
 
 message 支持以下几种极别
+#+BEGIN_QUOTE
+[[https://cmake.org/cmake/help/latest/command/message.html][Reference: message]]
+#+END_QUOTE
 
-> [Reference: message](https://cmake.org/cmake/help/latest/command/message.html)
+| mode | 使用方式 |
+| :- | :- |
+| (none) | 重要信息 |
+| STATUS | 次要信息 |
+| WARNING | Warning 信息，不影响生成 |
+| AUTHOR_WARNING | 同 WARNING，但仅 dev 状态显示 |
+| SEND_ERROR | Error 信息，不影响生成，跳过构建 |
+| FATAL_ERROR | Error 信息，停止生成 |
 
-| mode                     | 使用方式              |
-| :-                       | :-                    |
-| (none)                   | 重要信息              |
-| STATUS                   | 次要信息              |
-| WARNING                  | Warning 信息，不影响生成 |
-| AUTHOR<sub>WARNING</sub> | 同 WARNING，但仅 dev 状态显示 |
-| SEND<sub>ERROR</sub>     | Error 信息，不影响生成，跳过构建 |
-| FATAL<sub>ERROR</sub>    | Error 信息，停止生成  |
-
-
-# set
+* set
 
 用 set 设置变量
 
-```cmake
+#+BEGIN_SRC cmake
 set(NAME "World")
 message("Hello ${NAME}!")
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -P Hello/cmake/utils.cmake
 Hello World!
-```
+#+END_SRC
 
 复合变量
 
-```cmake
+#+BEGIN_SRC cmake
 set(NAME "World")
 set(MSG "Hello ${NAME}!")
 message("${MSG}")
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -P Hello/cmake/utils.cmake
 Hello World!
-```
+#+END_SRC
 
 通过编译命令 -D 指定的变量
 
-```cmake
+#+BEGIN_SRC cmake
 message("Hello ${NAME}!")
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -DNAME=World -P Hello/cmake/utils.cmake
 Hello World!
-```
+#+END_SRC
 
-
-# list
-
+* list
 可以用 set 来设置 list
 
-```cmake
+#+BEGIN_SRC cmake
 set(NAMES John Susan Michelle)  # 等价
 set(NAMES John;Susan;Michelle)  # 等价
 set(NAMES John Susan;Michelle)  # 等价
-```
+#+END_SRC
 
 展示 NAMES 的第二个元素
 
-```cmake
+#+BEGIN_SRC cmake
 set(NAMES John Susan Michelle)
 list(GET NAMES 2 NAME)
 message("Hello ${NAME}!")
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -P Hello/cmake/utils.cmake
 Hello Michelle!
-```
+#+END_SRC
 
 list 的更多用法参考
+#+BEGIN_QUOTE
+[[https://cmake.org/cmake/help/latest/command/list.html#sort][Reference: list]]
+#+END_QUOTE
 
-> [Reference: list](https://cmake.org/cmake/help/latest/command/list.html#sort)
+* if
 
-
-# if
-
-```cmake
+#+BEGIN_SRC cmake
 if(NAME STREQUAL "con1")
     message("condition 1")
 elseif(NAME STREQUAL "con2")
@@ -137,62 +136,61 @@ elseif(NAME STREQUAL "con2")
 else()
     message("condition 3")
 endif()
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -DNAME=con1 -P Hello/cmake/utils.cmake
 condition 1
 $ cmake -DNAME=con2 -P Hello/cmake/utils.cmake
 condition 2
 $ cmake -P Hello/cmake/utils.cmake
 condition 3
-```
+#+END_SRC
 
 条件判断的更多用法参考
+#+BEGIN_QUOTE
+[[https://cmake.org/cmake/help/latest/command/if.html][Reference: if]]
+#+END_QUOTE
 
-> [Reference: if](https://cmake.org/cmake/help/latest/command/if.html)
+* while
 
-
-# while
-
-```cmake
+#+BEGIN_SRC cmake
 while(${X} GREATER 0)
     message("X=${X}")
     math(EXPR X "${X} - 1")
 endwhile()
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -DX=3 -P Hello/cmake/utils.cmake
 X=3
 X=2
 X=1
-```
+#+END_SRC
 
 条件判断同 if
 
-
-# foreach
+* foreach
 
 常规循环
 
-```cmake
+#+BEGIN_SRC cmake
 foreach(X RANGE 0 10 3)
     message("X=${X}")
 endforeach()
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -P Hello/cmake/utils.cmake
 X=0
 X=3
 X=6
 X=9
-```
+#+END_SRC
 
 遍历 list
 
-```cmake
+#+BEGIN_SRC cmake
 set(A 0;1)
 set(B 2 3)
 set(C "4 5")
@@ -202,9 +200,9 @@ set(E "")
 foreach(X IN LISTS A B C D E)
     message("X=${X}")
 endforeach()
-```
+#+END_SRC
 
-```console
+#+BEGIN_SRC console
 $ cmake -P Hello/cmake/utils.cmake
 X=0
 X=1
@@ -214,4 +212,7 @@ X=4 5
 X=6
 X=7
 X=8
-```
+#+END_SRC
+
+
+

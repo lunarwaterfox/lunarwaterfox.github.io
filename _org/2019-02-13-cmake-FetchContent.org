@@ -1,3 +1,6 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
 ---
 
 layout: default
@@ -6,35 +9,34 @@ title: CMake Modules (1) - FetchContent
 categories: cmake
 
 ---
+#+END_EXPORT
 
-
-# 关于 FetchContent
-
-> [CMake-Modules: FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+* 关于 FetchContent 
+#+BEGIN_QUOTE
+[[https://cmake.org/cmake/help/latest/module/FetchContent.html][CMake-Modules: FetchContent]]
+#+END_QUOTE
 
 FetchContent 是 cmake 最新的引用外部依赖的模块，取代了之前的 ExternalProject，从 3.11 开始支持，使用时需设置最低版本号 3.11
 
-```cmake
+#+BEGIN_SRC cmake
 cmake_minimum_required(VERSION 3.11)
 include(FetchContent)
-```
+#+END_SRC
 
 另：FetchContent 与 ExternalProject，最大的不同是 FetchContent 是在 configure time 获取外部工程，而 ExternalProject 是在 build time 获取
 
-
-# Demo
-
-```console
+* Demo
+#+BEGIN_SRC console
 $ tree Hello
 Hello
 ├── Hello
 │   └── CMakeLists.txt
 └── build
-```
+#+END_SRC
 
 CMakeLists.txt 内容
 
-```cmake
+#+BEGIN_SRC cmake
 cmake_minimum_required(VERSION 3.11)
 
 include(FetchContent)
@@ -51,26 +53,25 @@ if(NOT googletest_POPULATED)
     FetchContent_Populate(googletest)
     add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 endif()
-```
+#+END_SRC
 
 编译
 
-```console
+#+BEGIN_SRC console
 $ cd build
 $ cmake ../Hello
 $ cmake --build .
-```
+#+END_SRC
 
+* FetchContent\under{}Declare
 
-# FetchContent_Declare
-
-```cmake
+#+BEGIN_SRC cmake
 FetchContent_Declare(<name> <contentOptions>...)
-```
+#+END_SRC
 
-FetchContent_Declare 支持的几种类型
+FetchContent\under{}Declare 支持的几种类型
 
-```cmake
+#+BEGIN_SRC cmake
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
@@ -88,34 +89,32 @@ FetchContent_Declare(
     SVN_REPOSITORY svn+ssh://svn.mycompany.com/srv/svn/trunk/certs
     SVN_REVISION   -r12345
 )
-```
+#+END_SRC
 
-FetchContent_Declare 只是用于设置参数，相关的参数可以使用后续的 FetchContent<sub>GetProperties</sub> 取到
+FetchContent\under{}Declare 只是用于设置参数，相关的参数可以使用后续的 FetchContent_GetProperties 取到
 
+* FetchContent\under{}GetProperties
 
-# FetchContent_GetProperties
-
-```cmake
+#+BEGIN_SRC cmake
 FetchContent_GetProperties( <name>
     [SOURCE_DIR <srcDirVar>]
     [BINARY_DIR <binDirVar>]
     [POPULATED <doneVar>]
 )
-```
+#+END_SRC
 
-FetchContent_GetProperties 会把相关参数写入全局变量里
+FetchContent\under{}GetProperties 会把相关参数写入全局变量里
 
-| name<sub>SOURCE</sub><sub>DIR</sub> | 源码路径       |
-| name<sub>BINARY</sub><sub>DIR</sub> | 生成路径       |
-| name<sub>POPULATED</sub>            | 是否已完成 Populate |
+| name_SOURCE_DIR | 源码路径            |
+| name_BINARY_DIR | 生成路径            |
+| name_POPULATED  | 是否已完成 Populate |
 
-其中 name 是 FetchContent_Declare 时设置的名称
+其中 name 是 FetchContent\under{}Declare 时设置的名称
 
+* FetchContent\under{}Populate
 
-# FetchContent_Populate
-
-```cmake
+#+BEGIN_SRC cmake
 FetchContent_Populate( <name> )
-```
+#+END_SRC
 
 开始获取

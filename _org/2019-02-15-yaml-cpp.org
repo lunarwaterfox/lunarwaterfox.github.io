@@ -1,3 +1,6 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
 ---
 
 layout: default
@@ -6,18 +9,17 @@ title: yaml-cpp 的使用
 categories: yaml
 
 ---
+#+END_EXPORT
 
-
-# 关于 yaml-cpp
-
-> [A YAML parser and emitter in C++](https://github.com/jbeder/yaml-cpp)
-
+* 关于 yaml-cpp
+#+BEGIN_QUOTE
+[[https://github.com/jbeder/yaml-cpp][A YAML parser and emitter in C++]]
+#+END_QUOTE
 yaml-cpp 是一个用于解析 yaml 的 c++ 库
 
+* demo
 
-# demo
-
-```cpp
+#+BEGIN_SRC cpp
 YAML::Node node = YAML::Load("" \
     "- name: Jone\n"            \
     "  age: 12\n"               \
@@ -61,9 +63,9 @@ node.IsNull();
 node.IsScalar();
 node.IsSequence();
 node.IsMap();
-```
+#+END_SRC
 
-```cpp
+#+BEGIN_SRC cpp
 // complex mapping
 YAML::Node node = YAML::Load("" \
     "? [year, month]\n"         \
@@ -75,4 +77,6 @@ v.push_back("year");
 v.push_back("month");
 
 cout << node[v][1] << endl;                     // 12
-```
+#+END_SRC
+
+

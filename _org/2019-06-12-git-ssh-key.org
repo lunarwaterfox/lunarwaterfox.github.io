@@ -5,8 +5,8 @@
 
 layout: default
 author: lunarwaterfox
-title: CMake Language
-categories: cmake
+title: Git 对多个 ssh key 的管理
+categories: git
 
 ---
 #+END_EXPORT
@@ -17,6 +17,12 @@ categories: cmake
 #+END_QUOTE
 
 通过设置 ssh 配置，来根据不同的 host，使用不同的 ssh key
+
+#+BEGIN_SRC console
+touch ~/.ssh/conifg
+#+END_SRC
+
+在 config 中写入
 
 #+BEGIN_SRC text
 # github
@@ -31,21 +37,23 @@ Host github.com
 [[https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables][Git Environment Variables]]
 #+END_QUOTE
 
-如果设置了 GIT\under{}SSH ，git 会用它来进行 ssh 连接，这样可以对任意的 git 操作指定 key
+如果设置了 GIT\under{}SSH，git 会用它来进行 ssh 连接，这样可以指定 key 来操作 git 
+
+GIT\under{}SSH 会执行以下命令
 
 #+BEGIN_SRC console
 $GIT_SSH [username@]host [-p <port>] <command>
 #+END_SRC
 
-GIT\under{}SSH 本身不能再接收参数，所以使用 GIT\under{}SSH 时一般要做一下 wrapper
+GIT\under{}SSH 本身不能再附带参数，所以使用 GIT\under{}SSH 时一般要做一下 wrapper
 
-例如，用指定 ssh-key clone github的工程可以
+例如，用指定 ssh-key clone github 的工程可以
 
 #+BEGIN_SRC console
-cd ~/directory_of_github_ssh_key
-touch github_ssh
-chmod +x github_ssh
-ln -s ~/directory_of_github_ssh_key/github_ssh /usr/local/bin
+~ $ cd ~/directory_of_github_ssh_key
+~ $ touch github_ssh
+~ $ chmod +x github_ssh
+~ $ ln -s ~/directory_of_github_ssh_key/github_ssh /usr/local/bin
 #+END_SRC
 
 github\under{}ssh 的内容如下
@@ -56,12 +64,10 @@ github\under{}ssh 的内容如下
 ssh -i ~/path_to_github_ssh_key $@
 #+END_SRC
 
-在 close 时，可以这样使用
+在 clone 时，这样使用
 
 #+BEGIN_SRC console
-
-GIT_SSH=github_ssh git clone git@github.com:your_project.git
-
+~ $ GIT_SSH=github_ssh git clone git@github.com:your_project.git
 #+END_SRC
   
 

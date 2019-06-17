@@ -4,72 +4,104 @@
 ---
 layout: default
 author: lunarwaterfox
-title: 
-categories: 
+title: 使用 org 书写用于 jekyll 的 markdown
+categories: [org, jekyll]
 ---
 #+END_EXPORT
 
-* 不显示 TableContent
+* 目录 - TableContent
+org export 出的 markdown 文件会自动填加一个目录(TableContent)，jekyll 不需要
+
+在文件头写入
 #+BEGIN_SRC org
-  #+OPTIONS: toc:nil
+#+OPTIONS: toc:nil
+#+END_SRC
+关闭 TableContent 导出
+
+* 标题 - headings
+org 的 headings, 快捷键: M-enter
+
+#+BEGIN_SRC org
+一级标题
+二级标题
 #+END_SRC
 
-* headings
+对应 markdown
 #+BEGIN_SRC markdown
-# heading level 1
-## heading level 2
+# 一级标题
+## 二级标题
 #+END_SRC
-#+BEGIN_SRC org
-* heading level 1
-** heading level 2
-#+END_SRC 
 
-快捷键: M-enter
-* unnumbered headings
+* 无序列表 - unnumbered headings
+org 和 markdown 同样都是
+#+BEGIN_SRC org
 - item1
 - item2
-
-* quote block
-#+BEGIN_SRC markdown
-> quote content
 #+END_SRC
 
+* 引用块 - quote block
+org 的引用块, 快捷键: <q TAB
 #+BEGIN_SRC org
 #+BEGIN_QUOTE
 quote content
 #+END_QUOTE
 #+END_SRC
-快捷键: <q TAB
-* code block
+
+对应 markdown
 #+BEGIN_SRC markdown
-```c
-printf("Hello\n");
-
-```
+> quote content
 #+END_SRC
 
-#+BEGIN_SRC org
-#+BEGIN_SRC c
-printf("Hello\n");
-#+END_SRC
-#+END_SRC
-快捷键: <s TAB
-* 特殊字符转义
-查询 M-x org-entities-help
-例如: GIT_SSH <=> GIT\under{}SSH
+# * 代码块 - code block
+# org 的代码块, 快捷键: <s TAB
+# #+BEGIN_SRC org
+# #+BEGIN_SRC c
+# printf("Hello\n");
+# #+END_SRC
+# #+END_SRC
+
+# 对应 markdown
+# #+BEGIN_SRC markdown
+# ```c
+# printf("Hello\n");
+#
+# ```
+# #+END_SRC
+
 * 超链接
-#+BEGIN_SRC markdown
-[链接描述](http://address)
-#+END_SRC
+org 的超链接, 快捷键: C-c C-l
 #+BEGIN_SRC org
 [[http://address][链接描述]]
 #+END_SRC
 
-快捷键: C-c C-l
-* 图片
+对应 markdown
 #+BEGIN_SRC markdown
-![链接描述](http://address)
+[链接描述](http://address)
 #+END_SRC
+
+* 引用图片
+org 的图片引用与普通超链接一样, 快捷键: C-c C-l
 #+BEGIN_SRC org
 [[http://address]]
 #+END_SRC
+
+对应 markdown
+#+BEGIN_SRC markdown
+![链接描述](http://address)
+#+END_SRC
+
+* 特殊字符转义
+常用字符转义表
+
+# | symbol     | escape     |
+# | ---        | ---        |
+# | \vbar{}    | \vbar{}    |
+# | \under     | \under     |
+# | \asciicirc | \asciicirc |
+
+#+BEGIN_EXPORT markdown
+例如: GIT_SSH <= GIT\under{}SSH
+#+END_EXPORT
+
+其他转义规则可查询 M-x org-entities-help
+

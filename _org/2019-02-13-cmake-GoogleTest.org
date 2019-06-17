@@ -1,3 +1,6 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
 ---
 
 layout: default
@@ -6,34 +9,34 @@ title: CMake Modules (2) - GoogleTest
 categories: cmake
 
 ---
+#+END_EXPORT
 
-
-# 关于 GoogleTest
-
-> [CMake-Modules: GoogleTest](https://cmake.org/cmake/help/latest/module/GoogleTest.html)
+* 关于 GoogleTest
+#+BEGIN_QUOTE
+[[https://cmake.org/cmake/help/latest/module/GoogleTest.html][CMake-Modules: GoogleTest]]
+#+END_QUOTE
 
 GoogleTest 可以将 gtest 的测试结果，集成到 ctest 中，cmake 最低支持版本 3.10
 
-```cmake
+#+BEGIN_SRC cmake
 cmake_minimum_required(VERSION 3.10)
 include(GoogleTest)
-```
+#+END_SRC
 
+* Demo
 
-# Demo
-
-```console
+#+BEGIN_SRC console
 $ tree Hello
 Hello
 ├── Hello
 │   ├── CMakeLists.txt
 │   └── test.cpp
 └── build
-```
+#+END_SRC
 
 CMakeLists.txt 写入
 
-```cmake
+#+BEGIN_SRC cmake
 # 最低版本设置成 3.11 是为了使用 FetchContent，单独使用 GoogleTest 时可设置为 3.10
 cmake_minimum_required(VERSION 3.11)
 
@@ -64,11 +67,11 @@ target_link_libraries(test_hello gtest_main)
 # 集成 gtest
 include(GoogleTest)
 gtest_discover_tests(test_hello)
-```
+#+END_SRC
 
-test.cpp 写一个简单的 test
+test.cpp 写一个简单的 test 
 
-```cpp
+#+BEGIN_SRC cpp
 #include <gtest/gtest.h>
 
 TEST(Hello, passed) {
@@ -78,19 +81,19 @@ TEST(Hello, passed) {
 TEST(Hello, failed) {
     ASSERT_TRUE(false);
 }
-```
+#+END_SRC
 
 编译
 
-```console
+#+BEGIN_SRC console
 $ cd build
 $ cmake ../Hello
 $ cmake --build .
-```
+#+END_SRC
 
 测试
 
-```console
+#+BEGIN_SRC console
 $ ctest
 Test project /Users/cmake/Desktop/hello/build
     Start 1: Hello.passed
@@ -105,4 +108,18 @@ Total Test time (real) =   0.01 sec
 The following tests FAILED:
           2 - Hello.failed (Failed)
 Errors while running CTest
-```
+#+END_SRC
+
+
+# #+BEGIN_SRC cmake
+# gtest_discover_tests(target
+#                      [EXTRA_ARGS arg1...]
+#                      [WORKING_DIRECTORY dir]
+#                      [TEST_PREFIX prefix]
+#                      [TEST_SUFFIX suffix]
+#                      [NO_PRETTY_TYPES] [NO_PRETTY_VALUES]
+#                      [PROPERTIES name1 value1...]
+#                      [TEST_LIST var]
+#                      [DISCOVERY_TIMEOUT seconds]
+# )
+# #+END_SRC

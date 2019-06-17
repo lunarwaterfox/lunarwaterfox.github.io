@@ -1,3 +1,6 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
 ---
 
 layout: default
@@ -6,18 +9,19 @@ title: 使用 GitHub Pages 搭建 Blog
 categories: [Github Pages, jekyll]
 
 ---
+#+END_EXPORT
 
-
-# 关于 GitHub Pages
-
-> [What is GitHub Pages?](https://help.github.com/articles/what-is-github-pages/)
+* 关于 GitHub Pages
+#+BEGIN_QUOTE
+[[https://help.github.com/articles/what-is-github-pages/][What is GitHub Pages?]]
+#+END_QUOTE
 
 GitHub Pages 是一种静态站点托管服务，它直接基于 GitHub 的 repository 构建，因此成本低廉。但由于是静态站点，所以依赖于服务端的动态功能都不支持。
 
-
-# 构建 GitHub Pages 站点
-
-> [Websites for you and your projects.](https://pages.github.com/)
+* 构建 GitHub Pages 站点
+#+BEGIN_QUOTE
+[[https://pages.github.com/][Websites for you and your projects.]]
+#+END_QUOTE
 
 GitHub Pages 提供两种方式，一种基于用户，一种基于项目。目前只用到了基于用户的方式。
 
@@ -27,12 +31,10 @@ GitHub Pages 提供两种方式，一种基于用户，一种基于项目。目�
 
 注：Private 项目，仅收费用户可以用作 GitHub Pages。免费用户请选择 Public 。
 
-
-# Hello World!
-
+* Hello World!
 提交一个最简单的页面
 
-```console
+#+BEGIN_SRC console
 ~ $ git clone https://github.com/username/username.github.io
 ~ $ cd username.github.io
 ~ $ echo "Hello World" > index.html
@@ -40,115 +42,108 @@ GitHub Pages 提供两种方式，一种基于用户，一种基于项目。目�
 ~ $ git add --all
 ~ $ git commit -m "Initial commit"
 ~ $ git push -u origin master
-```
+#+END_SRC
 
+* 设置 GitHub Pages
 
-# 设置 GitHub Pages
+<img src='/assets/images/tab.png' width='446' />
+<img src='/assets/images/pages.png' width='446' />
 
-<img src='/assets/images/tab.png' width='446' /> <img src='/assets/images/pages.png' width='446' />
-
-
-# 查看效果
-
+* 查看效果
 现在可以访问 username.github.io 来之查看效果了
 
-
-# 使用 Jekyll
-
-> [Jekyll Homepage](https://jekyllrb.com/)
+* 使用 Jekyll
+#+BEGIN_QUOTE
+[[https://jekyllrb.com/][Jekyll Homepage]]
+#+END_QUOTE
 
 Jekyll 是一个将文本转换成静态站点的工具，GitHub Pages 与其深度集成，可以用户很方便生成站点。（当然，如果你不使用 Jekyll ， 也可以自行管理站点文件）
 
 注：GitHub Pages 有自已的一组依赖包，所以建议用 GitHub 的工具创建（而不是官网提供的方法）
 
-
-# 安装 bundler
-
-> [Jekyll on macOS](https://jekyllrb.com/docs/installation/macos/)
+* 安装 bundler
+#+BEGIN_QUOTE
+[[https://jekyllrb.com/docs/installation/macos/][Jekyll on macOS]]
+#+END_QUOTE
 
 直接安装 bundler ，会要求 sudo，所以一般安装到用户下
 
-```console
+#+BEGIN_SRC console
 ~ $ gem install --user-install bundler
-```
+#+END_SRC
 
 然后填加 Path。（注意：Jekyll 官网给的路径不对，用下面的地址）
 
-在 ~/.bash<sub>profile</sub> 中填加
+在 ~/.bash_profile 中填加
 
-```bash
+#+BEGIN_SRC bash
 export GEM_HOME=$HOME/.gem/ruby/2.3.0/gems   #替换对应的 ruby 版本号
 export PATH=$HOME/.gem/ruby/2.3.0/bin:$PATH  #替换对应的 ruby 版本号
-```
+#+END_SRC
 
-
-# 安装 Github Pages 依赖
-
-> [GitHub Pages Ruby Gem](https://github.com/github/pages-gem)
+* 安装 Github Pages 依赖
+#+BEGIN_QUOTE
+[[https://github.com/github/pages-gem][GitHub Pages Ruby Gem]]
+#+END_QUOTE
 
 建立一个新项目，新建 Gemfile 文件，写入
-
-```
+#+BEGIN_SRC 
 source 'https://rubygems.org'
 gem "github-pages", group: :jekyll_plugins
-```
+#+END_SRC
 
 执行
 
-```console
+#+BEGIN_SRC console
 ~ $ bundle install
-```
+#+END_SRC
 
+* 创建一个 Jekyll 项目
+新建 _config.yml，index.md 两个文件，加上上面的 Gemfile，现在的目录是这样的
 
-# 创建一个 Jekyll 项目
-
-新建 \_config.yml，index.md 两个文件，加上上面的 Gemfile，现在的目录是这样的
-
-```
+#+BEGIN_SRC 
 Project
 ├── Gemfile
 ├── Gemfile.lock
 ├── _config.yml
 └── index.md
-```
+#+END_SRC
 
-\_config.yml 写入
+_config.yml 写入
 
-```
+#+BEGIN_SRC 
 title: The title of your site
 description: A short description of your site's purpose
 show_downloads: false
 google_analytics:
 theme: jekyll-theme-cayman
-```
+#+END_SRC
 
 index.md 写入
 
-```
+#+BEGIN_SRC 
 ---
 layout: default
 ---
-```
+#+END_SRC
 
 运行
 
-```console
+#+BEGIN_SRC console
 ~ $ bundle exec jekyll build
 ~ $ bundle exec jekyll serve
-```
+#+END_SRC
 
-打开 <http://localhost:4000> 可以看到效果了
+打开 [[http://localhost:4000]] 可以看到效果了
 
+* Jekyll Theme
+#+BEGIN_QUOTE
+[[https://pages.github.com/themes/][GitHub Pages Supported themes]]
+#+END_QUOTE
 
-# Jekyll Theme
-
-> [GitHub Pages Supported themes](https://pages.github.com/themes/)
-
-cayman 是 GitHub Pages 默认支持的其中一个主题，我们可以通过在我们在 \_config.yml 中写入 jekyll-theme-cayman 来自动使用。
+cayman 是 GitHub Pages 默认支持的其中一个主题，我们可以通过在我们在 _config.yml 中写入 jekyll-theme-cayman 来自动使用。
 
 其他主题可参考上面地址的使用说明。
 
-
-# 关联
-
--   使用 Jekyll 构建静态站点
+* 关联
+- 使用 Jekyll 构建静态站点
