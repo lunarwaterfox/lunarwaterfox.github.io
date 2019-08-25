@@ -1,0 +1,126 @@
+---
+
+layout: default
+author: lunarwaterfox
+title: Elisp 手册 - buffer
+categories: emacs1
+
+---
+
+
+# buffer 是什么
+
+<img src='/assets/images/buffer.png' width='446' />
+
+buffer 是 emacs 里用来编辑文档的基础单位，通常是用来访问文件的内容（当然也有和文件无关的 buffer），emacs 可以同时打开多个 buffer，但同一时间只会有一个 current-buffer，也就是显示在当前界面上的这个。
+
+
+# 获取一个 buffer
+
+-   Function: **current-buffer**
+    
+    ```elisp
+    (current-buffer)
+      => #<buffer *scratch*>
+    ```
+    
+    current-buffer 是 buffer 中最特别的一个，也就是你正在编辑的 buffer。
+
+-   Function: **get-buffer** *buffer-or-name*
+    
+    ```elisp
+    (get-buffer "foo")
+        => #<buffer foo>
+    (get-buffer "foo-nots")
+        => nil
+    ```
+    
+    传入 name: 如果存在 buffer-name 为 foo 的 buffer，就会返回此 buffer；如果不存在，返回 nil。
+    
+    传入 buffer: 直接返回此 buffer。
+
+-   Function: **get-buffer-create** *buffer-or-name*
+    
+    ```elisp
+    (get-buffer-create "foo")
+        => #<buffer foo>
+    ```
+    
+    传入 name: 如果存在 buffer-name 为 foo 的 buffer，就会返回此 buffer；如果不存在，则创建一个名为 foo 的 buffer。
+    
+    传入 buffer: 直接返回此 buffer。
+
+-   Function: **buffer-list** *&optional frame*
+    
+    ```elisp
+    (buffer-list)
+        => (#<buffer buffers.texi>
+            #<buffer  *Minibuf-1*> 
+            #<buffer buffer.c>
+            #<buffer *Help*> 
+            #<buffer TAGS>)
+    ```
+    
+    返回所有 buffer 的列表，如果传入 frame，则展时 frame local buffer 的列表。
+
+
+# buffer 的名称
+
+buffer name 是一个 buffer 最重要的属性之一了，你可以通过 name 获取到相应的 buffer。
+
+一般来说，访问文件的 buffer， 其 name 就是文件名；而不访问文件的 buffer 一般会把 buffer 的 name 用 \* 括起来，比如 \\\*Message\\\*
+
+-   FUNCTION: **buffer-name** *&optional buffer*
+    
+    ```elisp
+    (buffer-name)
+        => "buffers.texi"
+    ```
+    
+    返回指定 buffer 的 name，如果不传 buffer 的话，会返回 current buffer 的 name.
+
+-   COMMAND: **list-buffers**
+    
+    <img src='/assets/images/list-buffer.png' width='446' />
+    
+    显示所有 buffer 及其部分属性。
+
+
+# 编辑 buffer
+
+一般的编辑操作都是针对 current buffer 来的，如果要对其他 buffer 操作，要临时转换上下文。
+
+-   Macro: **with-current-buffer** *buffer-or-name body&#x2026;*
+    
+    ```elisp
+    (with-current-buffer "foo"
+      (insert "word"))  
+    ```
+    
+    在 foo 的 buffer 的上下文中执行 body 的相关操作，完成后恢复为 current buffer 的上下文。
+
+
+# 只读 buffer
+
+-   Command: **read-only-mode** *&optional arg*
+    
+    将 current buffer 转换为只读的，用于一些特殊的 buffer (浏览器，文档管理)
+
+
+# 关闭 buffer
+
+-   Command: **kill-buffer** *&optional buffer-or-name*
+    
+    ```elisp
+    (kill-buffer "foo.unchanged")
+        =>t
+    (kill-buffer "foo.changed")
+    
+    ---------- Buffer: Minibuffer ----------
+    Buffer foo.changed modified; kill anyway? (yes or no) yes
+    ---------- Buffer: Minibuffer ----------
+    
+        => t
+    ```
+    
+    如果 buffer 没有修改，可以直接关闭；如果 buffer 有改动，则会询问用户是否强制关闭
