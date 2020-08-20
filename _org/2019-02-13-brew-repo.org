@@ -1,0 +1,89 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
+---
+
+layout: default
+author: lunarwaterfox
+title: Homebrew 源地址设置
+categories: [Homebrew, git]
+
+---
+#+END_EXPORT
+
+* brew 环境变量
+  - HOMEBREW\under{}BOTTLE\under{}DOMAIN: bottles 的下截地址
+  - HOMEBREW\under{}BREW\under{}GIT\under{}REMOTE: brew 的 git 的远程地址
+  - HOMEBREW\under{}CORE\under{}GIT\under{}REMOTE: brew 的官方 repository 远程地址
+
+* brew 源的配置地址
+#+begin_src console
+~ $ cd $(brew --repo)    
+~ $ git config -l | grep remote.origin.url  # 对应于 HOMEBREW_BREW_GIT_REMOTE
+~ $
+~ $ cd $(brew --repo)/Library/Taps/homebrew/homebrew-core    
+~ $ git config -l | grep remote.origin.url  # 对应于 HOMEBREW_CORE_GIT_REMOTE
+~ $
+~ $ cd $(brew --repo)/Library/Taps/homebrew/homebrew-cask   
+~ $ git config -l | grep remote.origin.url  # cask 没有对应的环境变量，如果要修改它，就只能手动指定远程地址
+#+end_src
+
+* 修改源
+可以通过修改 git remote，来修改源地址
+#+begin_src console
+~ $ cd $(brew --repo)    
+~ $ git remote set-url origin https://mirrors.ustc.edu.cn/brew.git  # 清华源
+~ $ git remote set-url origin https://github.com/Homebrew/brew.git  # 换回原地址
+~ $
+~ $ cd $(brew --repo)/Library/Taps/homebrew/homebrew-core    
+~ $ git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git # 清华源
+~ $ git remote set-url origin https://github.com/Homebrew/homebrew-core.git # 换回原地址
+~ $
+~ $ cd $(brew --repo)/Library/Taps/homebrew/homebrew-cask   
+~ $ git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git # 清华源
+~ $ git remote set-url origin https://github.com/Homebrew/homebrew-cask.git # 换回原地址
+~ $
+~ $ export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles # 清华源
+~ $ export HOMEBREW_BOTTLE_DOMAIN=https://homebrew.bintray.com # 换回原地址
+#+end_src
+
+同时 brew 也提供了环境变量，可以直接使用（除了 cask）
+#+begin_src console
+~ $
+~ $ export HOMEBREW_BREW_GIT_REMOTE=https://mirrors.ustc.edu.cn/brew.git # 清华源
+~ $ export HOMEBREW_BREW_GIT_REMOTE=https://github.com/Homebrew/brew.git # 换回原地址
+~ $
+~ $ export HOMEBREW_CORE_GIT_REMOTE=https://mirrors.ustc.edu.cn/homebrew-core.git # 清华源
+~ $ export HOMEBREW_CORE_GIT_REMOTE=https://github.com/Homebrew/homebrew-core.git # 换回原地址
+~ $
+~ $ cd $(brew --repo)/Library/Taps/homebrew/homebrew-cask   
+~ $ git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git # 清华源
+~ $ git remote set-url origin https://github.com/Homebrew/homebrew-cask.git # 换回原地址
+~ $
+~ $ export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles # 清华源
+~ $ export HOMEBREW_BOTTLE_DOMAIN=https://homebrew.bintray.com # 换回原地址
+#+end_src
+
+* 本地镱像
+当然也可以自已作 brew 镜象，这样可以节省下每次 update 的时间，就是要定时同步，比较麻烦
+#+begin_src console
+~ $ git clone --mirror https://github.com/Homebrew/brew.git
+~ $ git clone --mirror https://github.com/Homebrew/homebrew-core.git
+~ $ git clone --mirror https://github.com/Homebrew/homebrew-cask.git
+~ $
+~ $ export HOMEBREW_BREW_GIT_REMOTE=/User/XXX/brew 的 clone 地址 
+~ $ export HOMEBREW_CORE_GIT_REMOTE=/User/XXX/core 的 clone 地址
+~ $
+~ $ cd $(brew --repo)/Library/Taps/homebrew/homebrew-cask   
+~ $ git remote set-url origin /User/XXX/cask 的 clone 地址
+#+end_src
+同步镜像使用命令
+#+begin_src console
+~ $ git remote update
+#+end_src
+
+* 代理访问
+brew 会使用系统的代理，例如：
+#+begin_src console
+~ $ export all_proxy=socks5://127.0.0.1:1080
+#+end_src

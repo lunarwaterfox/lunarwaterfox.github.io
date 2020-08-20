@@ -2,7 +2,7 @@
 layout: default
 author: lunarwaterfox
 title: 使用 org 书写用于 jekyll 的 markdown
-categories: [org, jekyll]
+categories: [org, jekyll, emacs]
 ---
 
 

@@ -3,7 +3,7 @@
 layout: default
 author: lunarwaterfox
 title: Elisp 手册 - buffer
-categories: emacs1
+categories: emacs
 
 ---
 
