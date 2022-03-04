@@ -1,0 +1,147 @@
+#+OPTIONS: toc:nil
+
+#+BEGIN_EXPORT markdown
+---
+
+layout: default
+author: lunarwaterfox
+title: Clang Assemble（Mac, x86_64）- Hello world!
+categories: [Clang, Assemble]
+
+---
+#+END_EXPORT
+
+* 前言
+  每次写 asm 的东西都不得不作诸多限定。没有办法，越底层对编译条件的要求就越精细。这里对这一系列文章的环境作一下统一限定
+
+  1. 编译器 AS，也就是 Clang 的 asm 工具
+  2. 指令集 x86_64，也就是 intel 芯片
+  3. 系统 MacOS, 版本就随意了
+
+  稍微解释下，各个环境的影响。
+  首先指令集不同，那就是质的区别。x86_64, arm，指令可以说是完全不同的两种东西。
+  相同指令集下，不同编译器的语法也不同，masm, nasm, as 都互不通用。
+  而在屏幕上显示输出则跟系统函数直接相关，
+  所以这些都要作限定
+
+* Hello World
+  惯例给出一个 Hello，world!
+  
+#+BEGIN_SRC assemble
+	.globl _main
+_main:
+	movq    $1, %rdi
+	leaq    str(%rip), %rsi
+	movq    $14, %rdx
+	movq    $0x02000004, %rax
+	syscall
+	        
+	xorl	%eax, %eax
+	retq
+
+str:                   
+	.ascii	"Hello, world!\n"                        
+
+#+END_SRC
+
+然后编一下，看结果
+
+#+BEGIN_SRC shell
+  $ clang hello.s
+  $ ./a.out
+#+END_SRC
+
+* syscall
+首先解释一下这两句
+
+#+BEGIN_SRC assemble
+movq    $0x02000004, %rax
+syscall
+#+END_SRC
+
+syscall 是运行系统内核函数的意思。在系统内核被加载到内存之后，系统函数的入口地址被收集成了一张大表，并给了每个函数一个编号。
+这样我们调用系统函数就简单的变成了调用指定编号，而编号就是通过 rax 指定，我们这次使用的就是 0x02000004。
+
+
+#+BEGIN_SRC c
+  // xnu 内核： osfmk/mach/i386/syscall_sw.h
+
+  #define SYSCALL_CLASS_SHIFT 24
+
+  #define SYSCALL_CLASS_NONE  0   /* Invalid */
+  #define SYSCALL_CLASS_MACH  1   /* Mach */  
+  #define SYSCALL_CLASS_UNIX  2   /* Unix/BSD */
+  #define SYSCALL_CLASS_MDEP  3   /* Machine-dependent */
+  #define SYSCALL_CLASS_DIAG  4   /* Diagnostics */
+
+  //...`
+  #define SYSCALL_CONSTRUCT_UNIX(syscall_number)             \
+              ((SYSCALL_CLASS_UNIX << SYSCALL_CLASS_SHIFT) | \
+               (SYSCALL_NUMBER_MASK & (syscall_number)))
+#+END_SRC
+
+从 xnu 内核文件中，我们可以看出 0x02000004 = 2 << 24 + 4，其实就是调用 Unix/BSD 的函数 4
+
+
+#+BEGIN_SRC text
+  // xnu 内核 bsd/kern/syscalls.master
+  ...
+  4  AUE_NULL  ALL  { user_ssize_t write(int fd, user_addr_t cbuf, user_size_t nbyte); }
+  ...
+#+End_SRC
+
+可以看到4其实就是，write(int fd, user_addr_t cbuf, user_size_t nbyte);
+
+* 参数
+#+BEGIN_SRC assemble
+  movq    $1, %rdi
+  leaq    str(%rip), %rsi
+  movq    $14, %rdx
+#+END_SRC
+
+这里就是在配置参数，
+参数1：rdi 输出的文件描述符，1 代码标准输出，也就是显视器
+参数2：rsi 字符串的起始地址
+参数3：rdx 字符个数
+
+然后，syscall 时，就变成了调用 write(rdi, rsi, rdx);
+我们就可以看到输出了
+
+* 其它
+#+BEGIN_SRC assemble
+	.globl _main
+_main:
+
+        //...
+	        
+	xorl	%eax, %eax
+	retq
+#+END_SRC
+
+这一部分，其实就是我们最常见的
+#+BEGIN_SRC c
+  int main() {
+    return 0;
+  }
+#+END_SRC
+
+因为用 clang 直接编译的，它原本就是 c 的编译器，所以也保留了 c 的入口点 _main。
+.global _main 代表开放 _main 的地址，使其可以从外部访问。
+这样 clang 在编译时就可以找到 _main 作代码的起始点
+
+rax 系列寄存器里的值，是作为函数返回值存在的
+#+BEGIN_SRC assemble
+  xorl  %eax, %eax
+  retq
+#+END_SRC
+
+就是返回了一个 int 型 0 (eax)
+
+#+BEGIN_SRC assemble
+  .ascii  "Hello, World!\n"   
+#+END_SRC
+
+.ascii 就是声明一段内存，存放字符对应16进制，然后可以通过 lea 可以取到这个地址使用。
+
+
+
